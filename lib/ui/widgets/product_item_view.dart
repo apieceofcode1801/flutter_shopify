@@ -6,8 +6,12 @@ class ProductItemView extends StatelessWidget {
   const ProductItemView({@required this.product}) : assert(product != null);
   @override
   Widget build(BuildContext context) {
-    final width = (MediaQuery.of(context).size.width - 48) / 2;
+    final imageWidth = (MediaQuery.of(context).size.width - 48) / 2;
+    final double imageHeight = 256;
     final image = product.images.first;
+    final scale = imageWidth / image.width < imageHeight / image.height
+        ? imageWidth / image.width
+        : imageHeight / image.height;
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -15,13 +19,13 @@ class ProductItemView extends StatelessWidget {
           image != null
               ? Image.network(
                   image.originalSrc,
-                  width: width,
-                  height: 256,
-                  scale: width / image.width,
-                  fit: BoxFit.contain,
+                  width: imageWidth,
+                  height: imageHeight,
+                  scale: scale,
+                  fit: BoxFit.fill,
                 )
               : Container(
-                  height: 256,
+                  height: imageHeight,
                 ),
           const SizedBox(
             height: 8,

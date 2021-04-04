@@ -39,8 +39,8 @@ class VarianPrice {
 class ImageEdge {
   String id;
   String originalSrc;
-  double width;
-  double height;
+  int width;
+  int height;
 
   ImageEdge.fromJson(Map<String, dynamic> json) {
     id = json['id'];

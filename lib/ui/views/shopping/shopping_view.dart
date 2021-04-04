@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_shopify/ui/home/home_viewmodel.dart';
 import 'package:flutter_shopify/ui/widgets/product_item_view.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-class HomeView extends StatelessWidget {
-  final model = HomeViewModel();
+import 'shopping_viewmodel.dart';
+
+class ShoppingView extends StatelessWidget {
+  final model = ShoppingViewModel();
+  ShoppingView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,9 +14,7 @@ class HomeView extends StatelessWidget {
         title: Text('Products'),
       ),
       body: Query(
-        options: QueryOptions(
-          document: gql(model.getProductQuery),
-        ),
+        options: model.options,
         builder: (QueryResult result,
             {VoidCallback refetch, FetchMore fetchMore}) {
           if (result.hasException) {
