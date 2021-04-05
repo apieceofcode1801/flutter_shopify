@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shopify/base/router.dart';
 import 'package:flutter_shopify/ui/widgets/product_item_view.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -35,7 +36,13 @@ class ShoppingView extends StatelessWidget {
               crossAxisCount: 2,
               mainAxisSpacing: 8,
               children: model.products
-                  .map((e) => ProductItemView(product: e))
+                  .map((e) => GestureDetector(
+                        child: ProductItemView(product: e),
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(Routes.product, arguments: e.handle);
+                        },
+                      ))
                   .toList(),
             ),
           );

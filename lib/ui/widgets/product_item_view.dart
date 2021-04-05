@@ -22,7 +22,7 @@ class ProductItemView extends StatelessWidget {
                   width: imageWidth,
                   height: imageHeight,
                   scale: scale,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.fitWidth,
                 )
               : Container(
                   height: imageHeight,
@@ -38,12 +38,7 @@ class ProductItemView extends StatelessWidget {
             height: 8,
           ),
           Text(
-              'Min price: ${product.priceRange.minVarianPrice.currency} ${product.priceRange.minVarianPrice.amount}'),
-          const SizedBox(
-            height: 8,
-          ),
-          Text(
-              'Max price: ${product.priceRange.maxVarianPrice.currency} ${product.priceRange.maxVarianPrice.amount}')
+              '${product.priceRange.minVarianPrice.currency} ${product.priceRange.minVarianPrice.amount}'),
         ],
       ),
     );

@@ -1,43 +1,9 @@
+import 'package:flutter_shopify/base/queries.dart';
 import 'package:flutter_shopify/entities/product.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-final getProductQuery = """
-{
-  products(first: 50) {
-    edges {
-      node {
-        id
-        title
-        images(first: 1) {
-          edges {
-            node {
-              id
-              originalSrc
-              width
-              height
-            }
-          }
-        }
-        priceRange {
-          minVariantPrice {
-            amount
-            currencyCode
-          }
-          maxVariantPrice {
-            amount
-            currencyCode
-          }
-        }
-        publishedAt
-        description
-      }
-    }
-  }
-}
-""";
-
 class ShoppingViewModel {
-  final options = QueryOptions(document: gql(getProductQuery));
+  final options = QueryOptions(document: gql(Queries.getProductsQuery(50)));
 
   List<Product> _products = [];
   List<Product> get products => _products;
