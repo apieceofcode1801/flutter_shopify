@@ -18,4 +18,17 @@ class Address {
     countryCodeV2 = json["countryCodeV2"];
     zip = json["zip"];
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": this.id,
+      "firstname": this.firstname,
+      "lastname": this.lastname,
+      "address1": this.address1,
+      "address2": this.address2,
+      "country": this.country,
+      "countryCodeV2": this.countryCodeV2,
+      "zip": this.zip
+    };
+  }
 }

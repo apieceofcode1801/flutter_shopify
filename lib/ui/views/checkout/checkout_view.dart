@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_shopify/base/queries.dart';
 import 'package:flutter_shopify/entities/checkout.dart';
+import 'package:flutter_shopify/services/api/mutations.dart';
 import 'package:flutter_shopify/ui/base/base_view.dart';
 import 'package:flutter_shopify/ui/views/checkout/checkout_viewmodel.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -16,7 +16,7 @@ class CheckoutView extends StatelessWidget {
       ),
       body: Mutation(
           options: MutationOptions(
-              document: gql(Queries.checkOutCreate(lineItems)),
+              document: gql(Mutations.checkOutCreate(lineItems)),
               update: (cache, result) {
                 return cache;
               }),

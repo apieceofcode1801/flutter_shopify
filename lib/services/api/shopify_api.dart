@@ -1,15 +1,88 @@
 import 'package:flutter_shopify/base/config.dart';
-import 'package:flutter_shopify/base/queries.dart';
+import 'package:flutter_shopify/entities/address.dart';
 import 'package:flutter_shopify/entities/checkout.dart';
 import 'package:flutter_shopify/entities/product.dart';
+import 'package:flutter_shopify/services/api/mutations.dart';
+import 'package:flutter_shopify/services/api/queries.dart';
 import 'package:flutter_shopify/services/api/server_api.dart';
 import 'package:graphql/client.dart';
 
 class ShopifyApi extends ServerApi {
   @override
-  Future<Checkout> addToCart(List<LineItem> lineItems) {
-    // TODO: implement addToCart
-    throw UnimplementedError();
+  Future<Checkout> createCheckout(List<LineItem> lineItems) async {
+    final options =
+        MutationOptions(document: gql(Mutations.checkOutCreate(lineItems)));
+    final result = await ShopifyClient.create().mutate(options);
+    if (result.hasException) {
+      return null;
+    } else {
+      return Checkout.fromJson(result.data['checkoutCreate']['checkout']);
+    }
+  }
+
+  @override
+  Future<Checkout> lineItemReplace(
+      List<LineItem> lineItems, String checkoutId) async {
+    final options = MutationOptions(
+        document: gql(Mutations.checkoutLineItemsReplace(
+            lineItems: lineItems, checkoutId: checkoutId)));
+    final result = await ShopifyClient.create().mutate(options);
+    if (result.hasException) {
+      return null;
+    } else {
+      return Checkout.fromJson(
+          result.data["checkoutLineItemsReplace"]['checkout']);
+    }
+  }
+
+  Future<Checkout> updateCheckoutShippingAddress(
+      [String checkoutId, Address address]) async {
+    final options = MutationOptions(
+        document: gql(Mutations.checkoutShippingAddressUpdate),
+        variables: {
+          'shippingAddress': address.toJson(),
+          "checkoutId": checkoutId
+        });
+    final result = await ShopifyClient.create().mutate(options);
+    if (result.hasException) {
+      return null;
+    } else {
+      return Checkout.fromJson(
+          result.data['checkoutShippingAddressUpdateV2']['checkout']);
+    }
+  }
+
+  @override
+  Future<List<ShippingRate>> getShippingRates(String checkoutId) async {
+    final options = QueryOptions(
+        document: gql(Queries.getShippingRates(checkoutId: checkoutId)));
+    final result = await ShopifyClient.create().query(options);
+    if (result.hasException) {
+      return null;
+    } else {
+      return (result.data['node']['availableShippingRates']['shippingRates']
+              as List)
+          .map((e) => ShippingRate.fromJson(e));
+    }
+  }
+
+  @override
+  Future<Checkout> updateShippingRate(
+      String checkoutId, String rateHandle) async {
+    final options = MutationOptions(
+        document: gql(Mutations.checkoutShippingLineUpdate),
+        variables: {
+          'checkoutId': checkoutId,
+          'shippingRateHandle': rateHandle
+        });
+
+    final result = await ShopifyClient.create().mutate(options);
+    if (result.hasException) {
+      return null;
+    } else {
+      return Checkout.fromJson(
+          result.data['checkoutShippingLineUpdate']['checkout']);
+    }
   }
 
   @override
