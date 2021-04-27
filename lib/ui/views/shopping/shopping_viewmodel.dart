@@ -1,15 +1,16 @@
-import 'package:flutter_shopify/base/queries.dart';
 import 'package:flutter_shopify/entities/product.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:flutter_shopify/services/api/server_service.dart';
+import 'package:flutter_shopify/ui/base/base_viewmodel.dart';
 
-class ShoppingViewModel {
-  final options = QueryOptions(document: gql(Queries.getProductsQuery(50)));
+class ShoppingViewModel extends BaseViewModel {
+  final serverService = ServerService.create();
 
   List<Product> _products = [];
   List<Product> get products => _products;
 
-  void loadResult(QueryResult result) {
-    List edges = result.data['products']['edges'];
-    _products = edges.map((e) => Product.fromJson(e['node'])).toList();
+  void loadProducts() async {
+    setState(ViewState.Busy);
+    _products = await serverService.getProductList(50);
+    setState(ViewState.Retrieved);
   }
 }

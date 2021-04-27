@@ -76,9 +76,9 @@ class Queries {
 }
 """;
 
-  static String checkOutCreate(String email, List<LineItem> lineItems) => """
+  static String checkOutCreate(List<LineItem> lineItems) => """
 mutation {
-  checkoutCreate(input: {email: $email, lineItems: ${lineItems.map((e) => e.toJson())}, }) {
+  checkoutCreate(input: {lineItems: ${lineItems.map((e) => e.toJson())}, }) {
     checkout {
       id
       email

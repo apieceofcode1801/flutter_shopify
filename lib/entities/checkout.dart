@@ -37,3 +37,15 @@ class LineItem {
     quantity = json["quantity"];
   }
 }
+
+class ShippingRate {
+  String title;
+  Price priceV2;
+  String handle;
+
+  ShippingRate.fromJson(Map<String, dynamic> json) {
+    title = json["title"];
+    priceV2 = Price.fromJson(json["priceV2"]);
+    handle = json["handle"];
+  }
+}

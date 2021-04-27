@@ -29,6 +29,7 @@ dependencies:
   provider: ^5.0.0-nullsafety.3
   graphql_flutter: ^4.0.1
   shared_preferences: 
+  graphql: ^4.0.0-beta
 
 dev_dependencies:
   flutter_test:

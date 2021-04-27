@@ -6,9 +6,8 @@ import 'package:flutter_shopify/ui/views/checkout/checkout_viewmodel.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class CheckoutView extends StatelessWidget {
-  final String email;
   final List<LineItem> lineItems;
-  const CheckoutView({@required this.email, @required this.lineItems});
+  const CheckoutView({@required this.lineItems});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +16,7 @@ class CheckoutView extends StatelessWidget {
       ),
       body: Mutation(
           options: MutationOptions(
-              document: gql(Queries.checkOutCreate(email, lineItems)),
+              document: gql(Queries.checkOutCreate(lineItems)),
               update: (cache, result) {
                 return cache;
               }),

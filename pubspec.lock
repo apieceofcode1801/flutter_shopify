@@ -178,7 +178,7 @@ packages:
     source: hosted
     version: "0.1.5"
   graphql:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: graphql
       url: "https://pub.dartlang.org"
