@@ -10,7 +10,7 @@ class ShoppingViewModel extends BaseViewModel {
 
   void loadProducts() async {
     setState(ViewState.Busy);
-    _products = await serverService.getProductList(50);
+    _products = await serverService.getProductList(50) ?? [];
     setState(ViewState.Retrieved);
   }
 }

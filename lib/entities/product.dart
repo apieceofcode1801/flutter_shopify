@@ -1,11 +1,11 @@
 class Product {
   var id;
-  String handle;
-  var title;
-  PriceRange priceRange;
+  String? handle;
+  var title = '';
+  PriceRange? priceRange;
   var description;
-  List<ImageNode> images;
-  List<Variant> variants;
+  List<ImageNode> images = [];
+  List<Variant> variants = [];
 
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -25,8 +25,8 @@ class Product {
 }
 
 class PriceRange {
-  Price minVarianPrice;
-  Price maxVarianPrice;
+  Price? minVarianPrice;
+  Price? maxVarianPrice;
 
   PriceRange.fromJson(Map<String, dynamic> json) {
     minVarianPrice = Price.fromJson(json['minVariantPrice']);
@@ -35,8 +35,8 @@ class PriceRange {
 }
 
 class Price {
-  double amount;
-  String currency;
+  double? amount;
+  String? currency;
 
   Price.fromJson(Map<String, dynamic> json) {
     amount = double.parse(json['amount']);
@@ -45,9 +45,9 @@ class Price {
 }
 
 class Variant {
-  String id;
-  String title;
-  Price priceV2;
+  String? id;
+  String? title;
+  Price? priceV2;
 
   Variant.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -57,10 +57,10 @@ class Variant {
 }
 
 class ImageNode {
-  String id;
-  String originalSrc;
-  int width;
-  int height;
+  String id = '';
+  String originalSrc = '';
+  int width = 0;
+  int height = 0;
 
   ImageNode.fromJson(Map<String, dynamic> json) {
     id = json['id'];

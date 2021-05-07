@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shopify/ui/base/base_view.dart';
 import 'package:flutter_shopify/ui/base/base_viewmodel.dart';
-
 import 'custom_views/custom_views.dart';
 import 'product_detail_viewmodel.dart';
 
 class ProductDetailView extends StatelessWidget {
-  final model = ProductDetailViewModel();
   final handle;
   ProductDetailView({this.handle});
   @override
   Widget build(BuildContext context) {
     return BaseView<ProductDetailViewModel>(
-      model: model,
+      model: ProductDetailViewModel(context: context),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           title: Text(model.title),
         ),
         body: Container(
           decoration: BoxDecoration(color: Colors.white),
-          constraints: BoxConstraints.expand(),
+          // constraints: BoxConstraints.expand(),
           child: model.state == ViewState.Retrieved
               ? Stack(
                   children: [
@@ -29,11 +27,12 @@ class ProductDetailView extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            model.images.isNotEmpty
+                            model.images?.isNotEmpty ?? false
                                 ? ProductDetailImageView(
                                     imageURLs: model.images
-                                        .map((e) => e.originalSrc)
-                                        .toList())
+                                            ?.map((e) => e.originalSrc)
+                                            .toList() ??
+                                        [])
                                 : Container(),
                             const SizedBox(
                               height: 8,
@@ -47,7 +46,7 @@ class ProductDetailView extends StatelessWidget {
                               height: 8,
                             ),
                             Text(
-                                '${model.currentVariant.priceV2.currency} ${model.currentVariant.priceV2.amount}'),
+                                '${model.currentVariant?.priceV2?.currency} ${model.currentVariant?.priceV2?.amount}'),
                             const SizedBox(
                               height: 16,
                             ),
@@ -64,8 +63,8 @@ class ProductDetailView extends StatelessWidget {
                               child: Container(
                                 child: ListView.builder(
                                   itemBuilder: (context, index) {
-                                    final variant = model.variants[index];
-                                    print(model.currentVariant.title);
+                                    final variant = model.variants?[index];
+                                    print(model.currentVariant?.title);
                                     return GestureDetector(
                                       child: Container(
                                         color: model.currentVariant == variant
@@ -75,18 +74,20 @@ class ProductDetailView extends StatelessWidget {
                                         padding: EdgeInsets.all(8),
                                         child: Center(
                                           child: Text(
-                                            variant.title,
+                                            variant?.title ?? '',
                                             textAlign: TextAlign.center,
                                           ),
                                         ),
                                       ),
                                       onTap: () {
-                                        model.setCurrentVariant(variant);
+                                        if (variant != null) {
+                                          model.setCurrentVariant(variant);
+                                        }
                                       },
                                     );
                                   },
                                   scrollDirection: Axis.horizontal,
-                                  itemCount: model.variants.length,
+                                  itemCount: model.variants?.length,
                                 ),
                               ),
                             ),
@@ -114,7 +115,9 @@ class ProductDetailView extends StatelessWidget {
                           height: 44,
                           child: TextButton(
                             child: Text('Add To Cart'),
-                            onPressed: () {},
+                            onPressed: () {
+                              model.addToCart();
+                            },
                           ),
                         ))
                   ],

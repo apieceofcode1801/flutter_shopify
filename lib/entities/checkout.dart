@@ -2,20 +2,21 @@ import 'package:flutter_shopify/entities/address.dart';
 import 'package:flutter_shopify/entities/product.dart';
 
 class Checkout {
-  String id;
-  String email;
-  String webUrl;
-  List<LineItem> lineItems;
-  Price subtotalV2;
-  Price totalV2;
-  Address shippingAddress;
+  String id = "";
+  String? email;
+  String? webUrl;
+  List<LineItem> lineItems = [];
+  Price? subtotalV2;
+  Price? totalV2;
+  Address? shippingAddress;
 
   Checkout.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     email = json["email"];
     webUrl = json["webUrl"];
-    lineItems =
-        (json["lineItems"]["edges"] as List).map((e) => LineItem.fromJson(e));
+    lineItems = (json["lineItems"]["edges"] as List)
+        .map((e) => LineItem.fromJson(e['node']))
+        .toList();
     subtotalV2 = Price.fromJson(json["subtotalPriceV2"]);
     totalV2 = Price.fromJson(json["totalPriceV2"]);
     shippingAddress = json["shippingAddress"] != null
@@ -25,27 +26,46 @@ class Checkout {
 }
 
 class LineItem {
-  String variantId;
-  int quantity;
+  late String id = '';
+  String? title;
+  late int quantity = 0;
+  Variant? variant;
 
-  LineItem({this.variantId, this.quantity});
-
-  Map<String, dynamic> toJson() =>
-      {"variantId": variantId, "quantity": quantity};
   LineItem.fromJson(Map<String, dynamic> json) {
-    variantId = json["varianId"];
+    id = json["id"];
+    title = json['title'];
     quantity = json["quantity"];
+    variant = Variant.fromJson(json['variant']);
   }
 }
 
 class ShippingRate {
-  String title;
-  Price priceV2;
-  String handle;
+  String title = '';
+  late Price priceV2;
+  String handle = '';
 
   ShippingRate.fromJson(Map<String, dynamic> json) {
     title = json["title"];
     priceV2 = Price.fromJson(json["priceV2"]);
     handle = json["handle"];
   }
+}
+
+class CheckoutCreateInput {
+  List<CheckoutLineItemInput> lineItems;
+
+  CheckoutCreateInput({required this.lineItems});
+
+  Map<String, dynamic> toJson() =>
+      {"lineItems": this.lineItems.map((e) => e.toJson()).toList()};
+}
+
+class CheckoutLineItemInput {
+  String variantId;
+  int quantity;
+
+  CheckoutLineItemInput({required this.variantId, required this.quantity});
+
+  Map<String, dynamic> toJson() =>
+      {"variantId": this.variantId, "quantity": quantity};
 }

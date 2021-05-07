@@ -5,17 +5,17 @@ import 'base_viewmodel.dart';
 class BaseView<T extends BaseViewModel> extends StatefulWidget {
   final T model;
 
-  final Widget Function(BuildContext context, T value, Widget child) builder;
+  final Widget Function(BuildContext context, T value, Widget? child) builder;
 
-  final Function(T) onModelFetchData;
-  final Function(T) onUpdateWidget;
+  final Function(T)? onModelFetchData;
+  final Function(T)? onUpdateWidget;
 
   const BaseView(
-      {Key key,
-      @required this.builder,
+      {Key? key,
+      required this.builder,
       this.onModelFetchData,
       this.onUpdateWidget,
-      this.model})
+      required this.model})
       : super(key: key);
 
   @override
@@ -25,16 +25,18 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
 class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
   @override
   void initState() {
-    if (widget.onModelFetchData != null) {
-      widget.onModelFetchData(widget.model);
+    final action = widget.onModelFetchData;
+    if (action != null) {
+      action(widget.model);
     }
     super.initState();
   }
 
   @override
   void didUpdateWidget(covariant BaseView<T> oldWidget) {
-    if (widget.onUpdateWidget != null) {
-      widget.onUpdateWidget(widget.model);
+    final action = widget.onUpdateWidget;
+    if (action != null) {
+      action(widget.model);
     }
     super.didUpdateWidget(oldWidget);
   }

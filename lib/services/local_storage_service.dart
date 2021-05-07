@@ -1,19 +1,22 @@
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class StorageService {
-  dynamic get({String key});
-  void save({String key, String value});
+  dynamic get({required String key});
+  void save({required String key, String value});
 }
 
 class LocalStorageService implements StorageService {
-  dynamic get({String key}) async {
+  dynamic get({required String key}) async {
     final pref = await SharedPreferences.getInstance();
     return pref.get(key);
   }
 
-  void save({String key, String value}) async {
-    final pref = await SharedPreferences.getInstance();
-    pref.setString(key, value);
+  void save({required String key, String? value}) async {
+    if (value != null) {
+      final pref = await SharedPreferences.getInstance();
+      pref.setString(key, value);
+    }
   }
 
   void remove(String key) async {
@@ -24,4 +27,5 @@ class LocalStorageService implements StorageService {
 
 class LocalStorageKeys {
   static const String customerToken = 'customer_token';
+  static const String checkoutId = 'checkout_id';
 }

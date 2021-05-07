@@ -6,7 +6,7 @@ import 'package:flutter_shopify/ui/widgets/product_item_view.dart';
 import 'shopping_viewmodel.dart';
 
 class ShoppingView extends StatelessWidget {
-  ShoppingView({Key key}) : super(key: key);
+  ShoppingView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

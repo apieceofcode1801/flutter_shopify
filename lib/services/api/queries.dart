@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class Queries {
   static String getProductsQuery(int limit) => """
 {
@@ -76,7 +74,7 @@ class Queries {
 }
 """;
 
-  static String getShippingRates({@required String checkoutId}) => '''
+  static String getShippingRates({required String checkoutId}) => '''
     query {
   node(id: $checkoutId) {
     ... on Checkout {

@@ -1,9 +1,7 @@
-import 'package:flutter_shopify/entities/checkout.dart';
-
 class Mutations {
-  static String checkOutCreate(List<LineItem> lineItems) => """
-mutation {
-  checkoutCreate(input: {lineItems: ${lineItems.map((e) => e.toJson())}, }) {
+  static String checkOutCreate() => r"""
+mutation($input: CheckoutCreateInput!) {
+  checkoutCreate(input: $input) {
     checkout {
       id
       email
@@ -43,12 +41,9 @@ mutation {
 
 """;
 
-  static String checkoutLineItemsReplace(
-          {List<LineItem> lineItems, String checkoutId}) =>
-      '''
-  mutation {
-  checkoutLineItemsReplace(lineItems: ${lineItems.map((e) => e.toJson())}, checkoutId: $checkoutId,
-  ) {
+  static String checkoutLineItemsReplace = r'''
+  mutation checkoutLineItemsReplace($lineItems: [CheckoutLineItemInput!]!, $checkoutId: ID!) {
+  checkoutLineItemsReplace(lineItems: $lineItems, checkoutId: $checkoutId) {
     checkout {
       id
       email
@@ -66,7 +61,7 @@ mutation {
               }
             }
             quantity
-            
+
           }
         }
       }
@@ -87,40 +82,40 @@ mutation {
 }
 ''';
 
-  static String checkoutShippingAddressUpdate = r'''
-  mutation checkoutShippingAddressUpdateV2($shippingAddress: MailingAddressInput!, $checkoutId: ID!) {
-  checkoutShippingAddressUpdateV2(shippingAddress: $shippingAddress, checkoutId: $checkoutId) {
-    userErrors {
-      field
-      message
-    }
-    checkout {
-      id
-      shippingAddress {
-        firstName
-        lastName
-        address1
-        province
-        country
-        zip
-      }
-    }
-  }
-}
-''';
+//   static String checkoutShippingAddressUpdate = r'''
+//   mutation checkoutShippingAddressUpdateV2($shippingAddress: MailingAddressInput!, $checkoutId: ID!) {
+//   checkoutShippingAddressUpdateV2(shippingAddress: $shippingAddress, checkoutId: $checkoutId) {
+//     userErrors {
+//       field
+//       message
+//     }
+//     checkout {
+//       id
+//       shippingAddress {
+//         firstName
+//         lastName
+//         address1
+//         province
+//         country
+//         zip
+//       }
+//     }
+//   }
+// }
+// ''';
 
-  static String checkoutShippingLineUpdate = r'''
-mutation checkoutShippingLineUpdate($checkoutId: ID!, $shippingRateHandle: String!) {
-  checkoutShippingLineUpdate(checkoutId: $checkoutId, shippingRateHandle: $shippingRateHandle) {
-    checkout {
-      id
-    }
-    checkoutUserErrors {
-      code
-      field
-      message
-    }
-  }
-}
-''';
+//   static String checkoutShippingLineUpdate = r'''
+// mutation checkoutShippingLineUpdate($checkoutId: ID!, $shippingRateHandle: String!) {
+//   checkoutShippingLineUpdate(checkoutId: $checkoutId, shippingRateHandle: $shippingRateHandle) {
+//     checkout {
+//       id
+//     }
+//     checkoutUserErrors {
+//       code
+//       field
+//       message
+//     }
+//   }
+// }
+// ''';
 }

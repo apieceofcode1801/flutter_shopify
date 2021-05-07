@@ -3,15 +3,18 @@ import 'package:flutter_shopify/entities/product.dart';
 
 class ProductItemView extends StatelessWidget {
   final Product product;
-  const ProductItemView({@required this.product}) : assert(product != null);
+  const ProductItemView({required this.product});
   @override
   Widget build(BuildContext context) {
     final imageWidth = (MediaQuery.of(context).size.width - 48) / 2;
     final double imageHeight = 256;
-    final image = product.images.first;
-    final scale = imageWidth / image.width < imageHeight / image.height
-        ? imageWidth / image.width
-        : imageHeight / image.height;
+    ImageNode? image = product.images.length > 0 ? product.images.first : null;
+    var scale = 1.0;
+    if (image != null) {
+      scale = imageWidth / image.width < imageHeight / image.height
+          ? imageWidth / image.width
+          : imageHeight / image.height;
+    }
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,7 +41,7 @@ class ProductItemView extends StatelessWidget {
             height: 8,
           ),
           Text(
-              '${product.priceRange.minVarianPrice.currency} ${product.priceRange.minVarianPrice.amount}'),
+              '${product.priceRange?.minVarianPrice?.currency} ${product.priceRange?.minVarianPrice?.amount}'),
         ],
       ),
     );

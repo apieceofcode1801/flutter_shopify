@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ProductDetailImageView extends StatelessWidget {
-  const ProductDetailImageView({Key key, this.imageURLs}) : super(key: key);
+  const ProductDetailImageView({Key? key, required this.imageURLs})
+      : super(key: key);
 
   final List<String> imageURLs;
 
