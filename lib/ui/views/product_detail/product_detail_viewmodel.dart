@@ -57,10 +57,20 @@ class ProductDetailViewModel extends BaseViewModel {
     final variant = _currentVariant;
     if (variant != null) {
       setState(ViewState.Busy);
-      final lineItem =
-          CheckoutLineItemInput(variantId: variant.id ?? '', quantity: 1);
-      final checkout = await serverService
-          .addToCart(CheckoutCreateInput(lineItems: [lineItem]));
+      var lineItemInputs = [
+        CheckoutLineItemInput(variantId: variant.id ?? '', quantity: 1)
+      ];
+      var checkout = checkoutModel.checkout;
+      if (checkout != null) {
+        final lineItems = checkout.lineItems;
+        lineItemInputs.addAll(lineItems.map((e) => CheckoutLineItemInput(
+            variantId: e.variant?.id ?? '', quantity: e.quantity)));
+        checkout =
+            await serverService.lineItemReplace(lineItemInputs, checkout.id);
+      } else {
+        checkout = await serverService
+            .addToCart(CheckoutCreateInput(lineItems: lineItemInputs));
+      }
       if (checkout != null) {
         LocalStorageService()
             .save(key: LocalStorageKeys.checkoutId, value: checkout.id);

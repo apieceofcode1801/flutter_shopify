@@ -12,6 +12,7 @@ mutation($input: CheckoutCreateInput!) {
             id
             title
             variant {
+              id
               title
               priceV2 {
                 amount
@@ -54,6 +55,7 @@ mutation($input: CheckoutCreateInput!) {
             id
             title
             variant {
+              id
               title
               priceV2 {
                 amount
@@ -73,10 +75,6 @@ mutation($input: CheckoutCreateInput!) {
         amount
         currencyCode
       }
-    }
-    checkoutUserErrors {
-      field
-      message
     }
   }
 }

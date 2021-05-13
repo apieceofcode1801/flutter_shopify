@@ -10,6 +10,22 @@ import 'package:graphql/client.dart';
 
 class ShopifyApi extends ServerApi {
   @override
+  Future<Checkout?> getCheckoutById(String id) async {
+    final query = Queries.getCheckoutById(id);
+    final options = QueryOptions(document: gql(query));
+    final result = await ShopifyClient.create().query(options);
+    if (result.hasException) {
+      return null;
+    } else {
+      final json = result.data?['node'];
+      if (json != null) {
+        return Checkout.fromJson(json);
+      }
+      return null;
+    }
+  }
+
+  @override
   Future<Checkout?> createCheckout(CheckoutCreateInput input) async {
     final options = MutationOptions(
         document: gql(Mutations.checkOutCreate()),
@@ -48,12 +64,13 @@ class ShopifyApi extends ServerApi {
   @override
   Future<Checkout?> lineItemReplace(
       List<CheckoutLineItemInput> lineItems, String checkoutId) async {
+    final variables = {
+      "lineItems": lineItems.map((e) => e.toJson()).toList(),
+      "checkoutId": checkoutId
+    };
     final options = MutationOptions(
         document: gql(Mutations.checkoutLineItemsReplace),
-        variables: {
-          "lineItems": lineItems.map((e) => e.toJson()).toList(),
-          "checkoutId": checkoutId
-        });
+        variables: variables);
     final result = await ShopifyClient.create().mutate(options);
     if (result.hasException) {
       return null;

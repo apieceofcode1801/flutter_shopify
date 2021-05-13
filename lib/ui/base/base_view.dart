@@ -43,9 +43,16 @@ class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<T>(
-      create: (context) => widget.model,
-      child: Consumer<T>(builder: widget.builder),
+    // Change to .value following this issue: https://github.com/rrousselGit/provider/issues/168
+    return ChangeNotifierProvider.value(
+      value: widget.model,
+      child: Consumer<T>(
+        builder: widget.builder,
+      ),
     );
+    // return ChangeNotifierProvider<T>(
+    //   create: (context) => widget.model,
+    //   child: Consumer<T>(builder: widget.builder),
+    // );
   }
 }

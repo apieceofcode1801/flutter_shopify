@@ -7,6 +7,7 @@ import 'package:flutter_shopify/services/api/shopify_api.dart';
 abstract class ServerServiceAbstract {
   Future<List<Product>?> getProductList(int limit);
   Future<Product?> getProductDetail(String handle);
+  Future<Checkout?> getCheckoutById(String id);
   Future<Checkout?> addToCart(CheckoutCreateInput input);
   Future<Checkout?> lineItemReplace(
       List<CheckoutLineItemInput> lineItems, String checkoutId);
@@ -31,6 +32,11 @@ class ServerService extends ServerServiceAbstract {
   @override
   Future<Product?> getProductDetail(String handle) async {
     return await api.getProductDetail(handle);
+  }
+
+  @override
+  Future<Checkout?> getCheckoutById(String id) async {
+    return await api.getCheckoutById(id);
   }
 
   @override

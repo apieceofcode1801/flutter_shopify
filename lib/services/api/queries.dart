@@ -74,6 +74,56 @@ class Queries {
 }
 """;
 
+  static String getCheckoutById(String id) => """
+  query {
+  node(id: \"$id\") {
+    id
+    ... on Checkout {
+      id
+      email
+      webUrl
+      lineItems(first: 100) {
+        edges {
+          node {
+            id
+            title
+            variant {
+              id
+              title
+              priceV2 {
+                amount
+                currencyCode
+              }
+            }
+            quantity
+            
+          }
+        }
+      }
+      subtotalPriceV2 {
+        amount
+        currencyCode
+      }
+      totalPriceV2 {
+        amount
+        currencyCode
+      }
+      shippingAddress {
+        id
+        firstName
+        lastName
+        address1
+        address2
+        city
+        country
+        countryCodeV2
+        zip
+      }
+    }
+  }
+  }
+""";
+
   static String getShippingRates({required String checkoutId}) => '''
     query {
   node(id: $checkoutId) {
