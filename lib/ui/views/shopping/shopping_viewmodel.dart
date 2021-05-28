@@ -1,16 +1,16 @@
-import 'package:flutter_shopify/entities/product.dart';
-import 'package:flutter_shopify/services/api/server_service.dart';
+import 'package:flutter_shopify/models/product.dart';
+import 'package:flutter_shopify/services/network/apis/product_services.dart';
 import 'package:flutter_shopify/ui/base/base_viewmodel.dart';
 
 class ShoppingViewModel extends BaseViewModel {
-  final serverService = ServerService.create();
+  final _productService = ProductServices();
 
   List<Product> _products = [];
   List<Product> get products => _products;
 
   void loadProducts() async {
     setState(ViewState.Busy);
-    _products = await serverService.getProductList(50) ?? [];
-    setState(ViewState.Retrieved);
+    _products = await _productService.retrieveAllProduct();
+    setState(ViewState.Idle);
   }
 }
