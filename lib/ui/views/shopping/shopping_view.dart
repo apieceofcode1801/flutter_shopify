@@ -17,19 +17,32 @@ class ShoppingView extends StatelessWidget {
           builder: (context, model, child) {
             return Padding(
               padding: EdgeInsets.all(16),
-              child: GridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 8,
-                children: model.products
-                    .map((e) => GestureDetector(
-                          child: ProductItemView(product: e),
-                          onTap: () {
-                            Navigator.of(context)
-                                .pushNamed(Routes.product, arguments: e.handle);
-                          },
-                        ))
-                    .toList(),
-              ),
+              child: GridView.custom(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
+                  childrenDelegate: SliverChildListDelegate.fixed(model.products
+                      .map((e) => GestureDetector(
+                            child: ProductItemView(product: e),
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed(Routes.product, arguments: e.id);
+                            },
+                          ))
+                      .toList())),
+              // GridView.count(
+              //   crossAxisCount: 2,
+              //   crossAxisSpacing: 8,
+              //   mainAxisSpacing: 8,
+              //   children: model.products
+              //       .map((e) => GestureDetector(
+              //             child: ProductItemView(product: e),
+              //             onTap: () {
+              //               Navigator.of(context)
+              //                   .pushNamed(Routes.product, arguments: e.id);
+              //             },
+              //           ))
+              //       .toList(),
+              // ),
             );
           },
           model: ShoppingViewModel(),

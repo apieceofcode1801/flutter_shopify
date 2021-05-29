@@ -5,128 +5,132 @@ import 'custom_views/custom_views.dart';
 import 'product_detail_viewmodel.dart';
 
 class ProductDetailView extends StatelessWidget {
-  final handle;
-  ProductDetailView({this.handle});
+  final model = ProductDetailViewModel();
+  final id;
+  ProductDetailView({this.id});
   @override
   Widget build(BuildContext context) {
     return BaseView<ProductDetailViewModel>(
-      model: ProductDetailViewModel(context: context),
-      builder: (context, model, child) => Scaffold(
-        appBar: AppBar(
-          title: Text(model.title),
-        ),
-        body: Container(
-          decoration: BoxDecoration(color: Colors.white),
-          // constraints: BoxConstraints.expand(),
-          child: model.state == ViewState.Retrieved
-              ? Stack(
-                  children: [
-                    SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 54),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            model.images?.isNotEmpty ?? false
-                                ? ProductDetailImageView(
-                                    imageURLs: model.images
-                                            ?.map((e) => e.originalSrc)
-                                            .toList() ??
-                                        [])
-                                : Container(),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              model.title,
-                              style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                                '${model.currentVariant?.priceV2?.currency} ${model.currentVariant?.priceV2?.amount}'),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            const Text(
-                              'Options',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Container(
-                              height: 44,
-                              child: Container(
-                                child: ListView.builder(
-                                  itemBuilder: (context, index) {
-                                    final variant = model.variants?[index];
-                                    print(model.currentVariant?.title);
-                                    return GestureDetector(
-                                      child: Container(
-                                        color: model.currentVariant == variant
-                                            ? Colors.grey
-                                            : Colors.grey[50],
-                                        height: 44,
-                                        padding: EdgeInsets.all(8),
-                                        child: Center(
-                                          child: Text(
-                                            variant?.title ?? '',
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        if (variant != null) {
-                                          model.setCurrentVariant(variant);
-                                        }
-                                      },
-                                    );
-                                  },
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: model.variants?.length,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            const Text(
-                              'Description',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Text(model.description),
-                          ],
+      model: model,
+      builder: (context, model, child) {
+        final product = model.product;
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(product?.title ?? ''),
+          ),
+          body: Container(
+            decoration: BoxDecoration(color: Colors.white),
+            // constraints: BoxConstraints.expand(),
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 54),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        product?.images.isNotEmpty ?? false
+                            ? ProductDetailImageView(
+                                imageURLs: product?.images
+                                        .map((e) => e.src)
+                                        .toList() ??
+                                    [])
+                            : Container(),
+                        const SizedBox(
+                          height: 8,
                         ),
-                      ),
-                    ),
-                    Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
+                        Text(
+                          product?.title ?? '',
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text('${model.product?.minimalPrice}'),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        const Text(
+                          'Options',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Container(
                           height: 44,
-                          child: TextButton(
-                            child: Text('Add To Cart'),
-                            onPressed: () {
-                              model.addToCart();
-                            },
+                          child: Container(
+                            child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                final variant = product?.variants[index];
+                                print(model.currentVariant?.title);
+                                return GestureDetector(
+                                  child: Container(
+                                    color: model.currentVariant == variant
+                                        ? Colors.grey
+                                        : Colors.grey[50],
+                                    height: 44,
+                                    padding: EdgeInsets.all(8),
+                                    child: Center(
+                                      child: Text(
+                                        variant?.title ?? '',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    if (variant != null) {
+                                      model.setCurrentVariant(variant);
+                                    }
+                                  },
+                                );
+                              },
+                              scrollDirection: Axis.horizontal,
+                              itemCount: product?.variants.length ?? 0,
+                            ),
                           ),
-                        ))
-                  ],
-                )
-              : Center(child: CircularProgressIndicator()),
-        ),
-      ),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        const Text(
+                          'Description',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(product?.bodyHtml ?? ''),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: 44,
+                      child: TextButton(
+                        child: Text('Add To Cart'),
+                        onPressed: () {
+                          model.addToCart(context);
+                        },
+                      ),
+                    )),
+                model.state == ViewState.Busy
+                    ? Center(child: CircularProgressIndicator())
+                    : Container()
+              ],
+            ),
+          ),
+        );
+      },
       onModelFetchData: (model) {
-        model.loadProduct(handle);
+        model.loadProduct(id);
       },
     );
   }

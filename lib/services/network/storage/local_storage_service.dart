@@ -7,6 +7,12 @@ abstract class StorageService {
 }
 
 class LocalStorageService implements StorageService {
+  static LocalStorageService? _instance;
+  static get instance =>
+      _instance != null ? _instance : LocalStorageService._internal();
+
+  LocalStorageService._internal();
+
   dynamic get({required String key}) async {
     final pref = await SharedPreferences.getInstance();
     return pref.get(key);
@@ -27,5 +33,5 @@ class LocalStorageService implements StorageService {
 
 class LocalStorageKeys {
   static const String customerToken = 'customer_token';
-  static const String checkoutId = 'checkout_id';
+  static const String checkoutToken = 'checkout_token';
 }

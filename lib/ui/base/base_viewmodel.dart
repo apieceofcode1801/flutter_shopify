@@ -36,4 +36,4 @@ class BaseViewModel extends ChangeNotifier {
   ViewState get state => _state;
 }
 
-enum ViewState { Idle, Busy, Retrieved, Error }
+enum ViewState { Idle, Busy, Error }

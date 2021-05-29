@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shopify/base/router.dart';
 import 'package:flutter_shopify/change_notifiers/checkout_model.dart';
 import 'package:flutter_shopify/ui/base/base_view.dart';
 import 'package:flutter_shopify/ui/views/cart/cart_view.dart';
@@ -27,64 +28,84 @@ class MainView extends StatelessWidget {
     final checkoutModel = context.watch<CheckoutModel>();
     return BaseView<MainViewModel>(
       model: MainViewModel(),
-      onModelFetchData: (model) async {
-        final checkout = await model.loadCheckout();
-        if (checkout != null) {
-          checkoutModel.setCheckout(checkout);
-        }
+      onModelFetchData: (model) {
+        model.loadCheckout(context);
       },
       builder: (context, model, child) => Scaffold(
         body: _widgetOptions.elementAt(model.selectedIndex),
-        bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                  color: Colors.white54,
-                ),
-                activeIcon: Icon(
-                  Icons.home,
-                  color: Colors.white,
-                ),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.category,
-                ),
-                label: 'Shopping',
-              ),
-              BottomNavigationBarItem(
-                icon: (checkoutModel.checkout?.lineItems.length ?? 0) > 0
-                    ? Stack(
-                        children: [
-                          Icon(Icons.shopping_bag),
-                          Positioned(
-                              child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: AppColors.main),
-                            width: 16,
-                            height: 16,
-                            child: Text(
-                                '${checkoutModel.checkout?.lineItems.length}',
-                                style: TextStyles.cartBadge),
-                          ))
-                        ],
-                      )
-                    : Icon(Icons.shopping_bag),
-                label: 'Cart',
-              ),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.account_box), label: 'Profile'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.more_vert), label: 'More'),
-            ],
-            currentIndex: model.selectedIndex,
-            backgroundColor: Colors.blue,
-            fixedColor: Colors.white,
-            onTap: model.onItemTapped),
+        bottomNavigationBar: Stack(
+          children: [
+            BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.home,
+                      color: Colors.white54,
+                    ),
+                    activeIcon: Icon(
+                      Icons.home,
+                      color: Colors.white,
+                    ),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.category,
+                    ),
+                    label: 'Shopping',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Container(),
+                    label: 'Cart',
+                  ),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.account_box), label: 'Profile'),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.more_vert), label: 'More'),
+                ],
+                currentIndex: model.selectedIndex,
+                backgroundColor: Colors.blue,
+                fixedColor: Colors.white,
+                onTap: model.onItemTapped),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  child: Container(
+                    height: 44,
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(bottom: 32),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.red),
+                    child: (checkoutModel.checkout?.lineItems.length ?? 0) > 0
+                        ? Stack(
+                            children: [
+                              Icon(Icons.shopping_bag),
+                              Positioned(
+                                  child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColors.main),
+                                width: 16,
+                                height: 16,
+                                child: Text(
+                                    '${checkoutModel.checkout?.lineItems.length}',
+                                    style: TextStyles.cartBadge),
+                              ))
+                            ],
+                          )
+                        : Icon(Icons.shopping_bag),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.cart);
+                  },
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
