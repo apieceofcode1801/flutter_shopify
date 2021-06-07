@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shopify/ui/base/base_view.dart';
 import 'package:flutter_shopify/ui/base/base_viewmodel.dart';
+import 'package:flutter_shopify/utils/static.dart';
 import 'custom_views/custom_views.dart';
 import 'product_detail_viewmodel.dart';
 
@@ -47,7 +48,8 @@ class ProductDetailView extends StatelessWidget {
                         const SizedBox(
                           height: 8,
                         ),
-                        Text('${model.product?.minimalPrice}'),
+                        Text(
+                            '${ShopConfig.currencySymbol}${model.product?.minimalPrice}'),
                         const SizedBox(
                           height: 16,
                         ),

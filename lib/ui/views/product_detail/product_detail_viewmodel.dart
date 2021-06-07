@@ -31,15 +31,21 @@ class ProductDetailViewModel extends BaseViewModel {
     final variant = _currentVariant;
     if (variant != null) {
       setState(ViewState.Busy);
-      var lineItemInputs = [
-        LineItemForCheckout(variantId: variant.id, quantity: 1)
-      ];
+      var lineItemInputs = <LineItemForCheckout>[];
       var checkout = context.read<CheckoutModel>().checkout;
       if (checkout != null) {
-        // TODO: Check coincident variants
         final lineItems = checkout.lineItems;
-        lineItemInputs.addAll(lineItems.map((e) => LineItemForCheckout(
-            variantId: e.variantId ?? 0, quantity: e.quantity ?? 0)));
+        lineItemInputs.addAll(lineItems.map((e) =>
+            LineItemForCheckout(variantId: e.variantId, quantity: e.quantity)));
+        final sameIndex = lineItemInputs
+            .indexWhere((element) => element.variantId == variant.id);
+        if (sameIndex != -1) {
+          final item = lineItemInputs[sameIndex];
+          item.quantity += 1;
+        } else {
+          lineItemInputs
+              .add(LineItemForCheckout(variantId: variant.id, quantity: 1));
+        }
         checkout = await _salesChannelServices.updateCheckoutLineItems(
             checkout.token, lineItemInputs);
       } else {

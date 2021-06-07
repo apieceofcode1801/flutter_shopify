@@ -65,19 +65,35 @@ class Checkout {
 }
 
 class CheckoutAddress {
-  late String address1;
-  late String address2;
-  late String city;
+  String? address1;
+  String? address2;
+  String? city;
   String? company;
-  late String country;
-  late String firstname;
-  late String lastname;
-  late int id;
-  late String phone;
-  late String province;
-  late String zip;
+  String? country;
+  String? firstname;
+  String? lastname;
+  int? id;
+  String? phone;
+  String? province;
+  String? zip;
   String? provinceCode;
   String? countryCode;
+  String get name => '$firstname $lastname';
+
+  CheckoutAddress(
+      {this.address1,
+      this.address2,
+      this.city,
+      this.company,
+      this.country,
+      this.countryCode,
+      this.firstname,
+      this.lastname,
+      this.id,
+      this.phone,
+      this.province,
+      this.zip,
+      this.provinceCode});
 
   CheckoutAddress.fromJson(Map<String, dynamic> json) {
     address1 = json['address1'] ?? '';
@@ -118,11 +134,11 @@ class CheckoutLineItem {
   double? linePrice; // String
   double? price; // String
   int? productId;
-  int? quantity; // String
+  late int quantity; // String
   bool? requiresShipping;
   String? sku;
   String? title;
-  int? variantId;
+  late int variantId;
   String? variantTitle;
   String? vendor;
   List<dynamic>? appliedDiscounts;
@@ -134,11 +150,11 @@ class CheckoutLineItem {
     linePrice = double.tryParse(json['line_price']);
     price = double.tryParse(json['price']);
     productId = json['product_id'];
-    quantity = json['quantity'];
+    quantity = json['quantity'] ?? -1;
     requiresShipping = json['requires_shipping'] ?? false;
     sku = json['sku'];
     title = json['title'];
-    variantId = json['variant_id'];
+    variantId = json['variant_id'] ?? -1;
     variantTitle = json['variant_title'];
     vendor = json['vendor'];
     appliedDiscounts = json['applied_discounts'];
@@ -173,4 +189,81 @@ class CheckoutShippingRate {
         'phone_required': phoneRequired,
         'handle': handle
       };
+}
+
+class CreditCard {
+  String? firstName;
+  String? lastName;
+  String? firstDigits;
+  String? lastDigits;
+  String? brand;
+  int? expiryMonth;
+  int? expiryYear;
+
+  CreditCard.fromJson(Map<String, dynamic> json) {
+    firstName = json['first_name'];
+    lastName = json['last_name'];
+    firstDigits = json['first_digits'];
+    lastDigits = json['last_digits'];
+    brand = json['brand'];
+    expiryMonth = json['expiry_month'];
+    expiryYear = json['expiry_year'];
+  }
+}
+
+class PaymentNextAction {
+  String? redirectUrl;
+  PaymentNextAction.fromJson(Map<String, dynamic> json) {
+    redirectUrl = json['redirect_url'];
+  }
+}
+
+class Transaction {
+  String? amount;
+  String? amountIn;
+  String? amountOut;
+  String? amountRounding;
+  String? authorization;
+  DateTime? createdAt;
+  String? currency;
+  String? gateway;
+  late int id;
+  String? kind;
+  String? message;
+  String? status;
+  bool test = false;
+
+  Transaction.fromJson(Map<String, dynamic> json) {
+    amount = json['amount'];
+    amountIn = json['amount_in'];
+    amountOut = json['amount_out'];
+    amountRounding = json['amount_rounding'];
+    authorization = json['authorization'];
+    createdAt = DateTime.tryParse(json['created_at'] ?? '');
+    currency = json['currency'];
+    gateway = json['gateway'];
+    id = json['id'];
+    kind = json['kind'];
+    message = json['message'];
+    status = json['status'];
+    test = json['test'];
+  }
+}
+
+class Payment {
+  CreditCard? creditCard;
+  late int id;
+  String? paymentProcessingErrorMessage;
+  PaymentNextAction? nextAction;
+  Transaction? transaction;
+  String? uniqueToken;
+
+  Payment.fromJson(Map<String, dynamic> json) {
+    creditCard = CreditCard.fromJson(json['credit_card'] ?? {});
+    id = json['id'];
+    paymentProcessingErrorMessage = json['payment_processing_error_message'];
+    nextAction = PaymentNextAction.fromJson(json['next_action'] ?? {});
+    transaction = Transaction.fromJson(json['transaction'] ?? {});
+    uniqueToken = json['unique_token'];
+  }
 }

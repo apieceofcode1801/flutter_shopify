@@ -15,6 +15,7 @@ class Product {
   late DateTime updatedAt;
   late List<ProductVariant> variants;
   late String vendor;
+  ProductImage? image;
 
   double get minimalPrice {
     return variants.map((e) => e.price).reduce((max));
@@ -33,6 +34,7 @@ class Product {
     images = ((json['images'] as List?) != null)
         ? (json['images'] as List).map((e) => ProductImage.fromJson(e)).toList()
         : [];
+    image = json['image'] != null ? ProductImage.fromJson(json['image']) : null;
     options = ((json['options'] as List?) ?? [])
         .map((e) => ProductOption.fromJson(e))
         .toList();

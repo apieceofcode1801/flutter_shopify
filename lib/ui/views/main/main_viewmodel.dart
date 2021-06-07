@@ -11,8 +11,10 @@ class MainViewModel extends BaseViewModel {
   int get selectedIndex => _selectedIndex;
 
   void onItemTapped(int index) {
-    _selectedIndex = index;
-    notifyListeners();
+    if (index != 2) {
+      _selectedIndex = index;
+      notifyListeners();
+    }
   }
 
   void loadCheckout(BuildContext context) async {

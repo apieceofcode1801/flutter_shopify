@@ -15,34 +15,28 @@ class ShoppingView extends StatelessWidget {
         ),
         body: BaseView<ShoppingViewModel>(
           builder: (context, model, child) {
+            final itemWidth = (MediaQuery.of(context).size.width - 48) / 2;
+            final itemHeight = 256 + 72;
             return Padding(
               padding: EdgeInsets.all(16),
-              child: GridView.custom(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  childrenDelegate: SliverChildListDelegate.fixed(model.products
-                      .map((e) => GestureDetector(
-                            child: ProductItemView(product: e),
-                            onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed(Routes.product, arguments: e.id);
-                            },
-                          ))
-                      .toList())),
-              // GridView.count(
-              //   crossAxisCount: 2,
-              //   crossAxisSpacing: 8,
-              //   mainAxisSpacing: 8,
-              //   children: model.products
-              //       .map((e) => GestureDetector(
-              //             child: ProductItemView(product: e),
-              //             onTap: () {
-              //               Navigator.of(context)
-              //                   .pushNamed(Routes.product, arguments: e.id);
-              //             },
-              //           ))
-              //       .toList(),
-              // ),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: itemWidth / itemHeight,
+                ),
+                itemCount: model.products.length,
+                itemBuilder: (context, index) {
+                  final product = model.products[index];
+                  return GridTile(
+                      child: GestureDetector(
+                    child: ProductItemView(product: product),
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(Routes.product, arguments: product.id);
+                    },
+                  ));
+                },
+              ),
             );
           },
           model: ShoppingViewModel(),

@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_shopify/base/router.dart';
 import 'package:flutter_shopify/change_notifiers/checkout_model.dart';
 import 'package:flutter_shopify/ui/base/base_view.dart';
-import 'package:flutter_shopify/ui/views/cart/cart_view.dart';
 import 'package:flutter_shopify/ui/views/home/home_view.dart';
 import 'package:flutter_shopify/ui/views/main/main_viewmodel.dart';
 import 'package:flutter_shopify/ui/views/more/more_view.dart';
 import 'package:flutter_shopify/ui/views/profile/profile_view.dart';
 import 'package:flutter_shopify/ui/views/shopping/shopping_view.dart';
-import 'package:flutter_shopify/ui/views/styles/colors.dart';
 import 'package:flutter_shopify/ui/views/styles/text_styles.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +14,7 @@ class MainView extends StatelessWidget {
   final List<Widget> _widgetOptions = <Widget>[
     HomeView(),
     ShoppingView(),
-    CartView(),
+    Container(),
     ProfileView(),
     MoreView(),
   ];
@@ -57,7 +55,7 @@ class MainView extends StatelessWidget {
                   ),
                   BottomNavigationBarItem(
                     icon: Container(),
-                    label: 'Cart',
+                    label: '',
                   ),
                   BottomNavigationBarItem(
                       icon: Icon(Icons.account_box), label: 'Profile'),
@@ -68,44 +66,41 @@ class MainView extends StatelessWidget {
                 backgroundColor: Colors.blue,
                 fixedColor: Colors.white,
                 onTap: model.onItemTapped),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  child: Container(
-                    height: 44,
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(bottom: 32),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.red),
-                    child: (checkoutModel.checkout?.lineItems.length ?? 0) > 0
-                        ? Stack(
-                            children: [
-                              Icon(Icons.shopping_bag),
-                              Positioned(
-                                  child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: AppColors.main),
-                                width: 16,
-                                height: 16,
-                                child: Text(
-                                    '${checkoutModel.checkout?.lineItems.length}',
-                                    style: TextStyles.cartBadge),
-                              ))
-                            ],
-                          )
-                        : Icon(Icons.shopping_bag),
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(context, Routes.cart);
-                  },
-                )
-              ],
-            ),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, Routes.cart);
+          },
+          child: (checkoutModel.checkout?.lineItems.length ?? 0) > 0
+              ? Stack(
+                  children: [
+                    Icon(
+                      Icons.shopping_cart,
+                      size: 32,
+                    ),
+                    Positioned(
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.red[200]),
+                        width: 16,
+                        height: 16,
+                        child: Text(
+                            '${checkoutModel.checkout?.lineItems.length}',
+                            style: TextStyles.cartBadge),
+                      ),
+                    )
+                  ],
+                )
+              : Icon(
+                  Icons.shopping_cart,
+                  size: 32,
+                ),
+        ),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterDocked,
       ),
     );
   }

@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter_shopify/models/checkout.dart';
 import 'package:flutter_shopify/services/network/network_service.dart';
 
 class LineItemForCheckout {
   final int variantId;
-  final int quantity;
+  int quantity;
 
   LineItemForCheckout({required this.variantId, required this.quantity});
 
@@ -40,13 +38,19 @@ class SalesChannelServices {
     }
   }
 
-  Future<Checkout?> updateCheckoutShippingAddress(
-      String token, CheckoutAddress shippingAddress) async {
+  Future<Checkout?> updateCheckoutShippingAndBillingAddress(
+      {required String token,
+      CheckoutAddress? shippingAddress,
+      CheckoutAddress? billingAddress}) async {
     final service = NetworkService();
     service.path = '/checkouts/$token.json';
     service.method = HttpMethod.PUT;
     service.body = {
-      'checkout': {'token': token, 'shipping_address': shippingAddress.toJson()}
+      'checkout': {
+        'token': token,
+        'shipping_address': shippingAddress?.toJson(),
+        'billing_address': billingAddress?.toJson()
+      }
     };
     try {
       final result = await service.request(needToken: true);
@@ -89,12 +93,16 @@ class SalesChannelServices {
     }
   }
 
-  Future<Checkout?> retrieveAvailableShippingRates(String token) async {
+  Future<List<CheckoutShippingRate>?> retrieveAvailableShippingRates(
+      String token) async {
     final service = NetworkService();
     service.path = '/checkouts/$token/shipping_rates.json';
     try {
       final result = await service.request(needToken: true);
-      return Checkout.fromJson(result['checkout']);
+      final shippingRates = result['shipping_rates'] as List?;
+      return shippingRates
+          ?.map((e) => CheckoutShippingRate.fromJson(e))
+          .toList();
     } catch (err) {
       print(err.toString());
     }
