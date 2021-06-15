@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shopify/models/product.dart';
+import 'package:flutter_shopify/ui/views/styles/text_styles.dart';
+import 'package:flutter_shopify/utils/app_utils.dart';
 import 'package:flutter_shopify/utils/static.dart';
 
 class ProductItemView extends StatelessWidget {
@@ -38,12 +40,15 @@ class ProductItemView extends StatelessWidget {
           ),
           Text(
             product.title,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyles.titleBold,
           ),
           const SizedBox(
             height: 8,
           ),
-          Text('${ShopConfig.currencySymbol}${product.minimalPrice}'),
+          Text(
+            priceWithCurrency(product.minimalPrice),
+            style: TextStyles.subTitleRegular,
+          ),
         ],
       ),
     );

@@ -10,9 +10,7 @@ class LoadingView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BaseView<LoadingViewModel>(
-        builder: (context, model, child) {
-          return Container(color: Colors.green[100]);
-        },
+        builder: (context, model, child) => Container(color: Colors.green[100]),
         model: LoadingViewModel(),
         onModelFetchData: (model) async {
           await model.loadData();

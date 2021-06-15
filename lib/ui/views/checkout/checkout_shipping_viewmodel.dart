@@ -11,7 +11,7 @@ class CheckoutShippingViewModel extends BaseViewModel {
   CheckoutShippingRate? get currentShippingRate => _currentShippingRate;
 
   void loadShippingRates(String token) async {
-    setState(ViewState.Busy);
+    setState(ViewState.Initial);
     _shippingRates =
         await _salesChannelService.retrieveAvailableShippingRates(token) ?? [];
     setState(ViewState.Idle);

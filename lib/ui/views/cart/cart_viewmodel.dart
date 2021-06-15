@@ -29,8 +29,9 @@ class CartViewModel extends BaseViewModel {
   }
 
   void loadCheckout(BuildContext context) {
+    setState(ViewState.Initial);
     _checkoutModel = context.read<CheckoutModel>();
     _checkout = _checkoutModel?.checkout;
-    notifyListeners();
+    setState(ViewState.Idle);
   }
 }

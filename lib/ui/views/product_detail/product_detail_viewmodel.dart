@@ -17,7 +17,7 @@ class ProductDetailViewModel extends BaseViewModel {
   ProductVariant? get currentVariant => _currentVariant;
 
   void loadProduct(int id) async {
-    setState(ViewState.Busy);
+    setState(ViewState.Initial);
     _product = await _productServices.retrieveProduct(id);
     setState(ViewState.Idle);
   }

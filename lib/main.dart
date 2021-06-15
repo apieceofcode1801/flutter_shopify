@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_shopify/base/router.dart';
 import 'package:flutter_shopify/change_notifiers/checkout_model.dart';
+import 'package:flutter_shopify/ui/views/styles/colors.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -13,12 +14,7 @@ class MyApp extends StatelessWidget {
     final app = MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'APieceOfCode',
-      theme: ThemeData(
-          textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-                primary: Colors.white, backgroundColor: Colors.blue),
-          ),
-          primaryColor: Colors.blue),
+      theme: ThemeData(primaryColor: AppColors.main),
       onGenerateRoute: AppRouter.generateRoute,
     );
     return ChangeNotifierProvider<CheckoutModel>(

@@ -7,7 +7,7 @@ import 'package:flutter_shopify/ui/views/new_address/new_address_view.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutNewAddressView extends StatelessWidget {
-  final model = CheckoutNewAddressViewModel();
+  final _model = CheckoutNewAddressViewModel();
   @override
   Widget build(BuildContext context) {
     final checkoutModel = context.read<CheckoutModel>();
@@ -16,23 +16,21 @@ class CheckoutNewAddressView extends StatelessWidget {
         title: Text('Shipping Address'),
       ),
       body: BaseView<CheckoutNewAddressViewModel>(
-        builder: (context, model, child) {
-          return NewAddressView(
-            actionTitle: 'Continue to checkout',
-            action: (address) async {
-              final token = checkoutModel.checkout?.token;
-              if (token != null) {
-                final checkout = await model.updateCheckoutWithShippingAddress(
-                    token, address);
-                if (checkout != null) {
-                  checkoutModel.setCheckout(checkout);
-                  Navigator.pushNamed(context, Routes.checkoutShipping);
-                }
+        builder: (context, model, child) => NewAddressView(
+          actionTitle: 'Continue to checkout',
+          action: (address) async {
+            final token = checkoutModel.checkout?.token;
+            if (token != null) {
+              final checkout =
+                  await model.updateCheckoutWithShippingAddress(token, address);
+              if (checkout != null) {
+                checkoutModel.setCheckout(checkout);
+                Navigator.pushNamed(context, Routes.checkoutShipping);
               }
-            },
-          );
-        },
-        model: model,
+            }
+          },
+        ),
+        model: _model,
       ),
     );
   }

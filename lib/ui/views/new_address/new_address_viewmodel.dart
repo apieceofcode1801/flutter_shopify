@@ -38,7 +38,7 @@ class NewAddressViewModel extends BaseViewModel {
   var zipCodeController = TextEditingController();
 
   void loadData() async {
-    setState(ViewState.Busy);
+    setState(ViewState.Initial);
     _countries = await _storeServices.getCountryList();
     setState(ViewState.Idle);
   }

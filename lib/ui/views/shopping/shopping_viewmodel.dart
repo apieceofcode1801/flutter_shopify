@@ -9,7 +9,7 @@ class ShoppingViewModel extends BaseViewModel {
   List<Product> get products => _products;
 
   void loadProducts() async {
-    setState(ViewState.Busy);
+    setState(ViewState.Initial);
     _products = await _productService.retrieveAllProduct();
     setState(ViewState.Idle);
   }
