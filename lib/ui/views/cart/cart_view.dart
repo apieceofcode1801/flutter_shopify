@@ -19,88 +19,91 @@ class CartView extends StatelessWidget {
   Widget build(BuildContext context) {
     final checkout = context.read<CheckoutModel>().checkout;
     return SafeArea(
+        top: false,
         child: Scaffold(
-      appBar: AppBar(
-        title: Text('CART'),
-      ),
-      body: BaseView<CartViewModel>(
-        builder: (context, model, child) => Stack(
-          children: [
-            model.state == ViewState.Initial
-                ? LoadingView()
-                : checkout != null && checkout.lineItems.length > 0
-                    ? Stack(
-                        children: [
-                          ListView.separated(
-                            itemBuilder: (context, index) {
-                              if (index == checkout.lineItems.length) {
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16),
-                                  child: SizedBox(
-                                    height: 44,
-                                    child: _priceView('SUBTOTAL',
-                                        checkout.subtotalPrice ?? 0),
-                                  ),
-                                );
-                              }
-                              return CartItemView(
-                                  lineItem: checkout.lineItems[index],
-                                  onDelete: () {
-                                    DialogManager.showCommonDialog(context,
-                                        message:
-                                            'Are you sure you want to delete this item from Cart?',
-                                        isAlert: true,
-                                        actionTitle: 'Yes', action: () {
-                                      _model.deleteItemAt(index);
-                                    });
-                                  });
-                            },
-                            itemCount: checkout.lineItems.length + 1,
-                            separatorBuilder: (context, index) {
-                              return Container(
-                                color: Colors.grey[200],
-                                height: 8,
-                              );
-                            },
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              padding: EdgeInsets.all(16),
-                              child: Column(
-                                children: [
-                                  _priceView('TOTAL', checkout.totalPrice ?? 0),
-                                  const SizedBox(
-                                    height: 12,
-                                  ),
-                                  CommonButton(
-                                    'Checkout'.toUpperCase(),
-                                    action: () {
-                                      Navigator.of(context)
-                                          .pushNamed(Routes.checkoutShipping);
-                                    },
-                                  )
-                                ],
+          appBar: AppBar(
+            title: Text('CART'),
+          ),
+          body: BaseView<CartViewModel>(
+            builder: (context, model, child) => Stack(
+              children: [
+                model.state == ViewState.Initial
+                    ? LoadingView()
+                    : checkout != null && checkout.lineItems.length > 0
+                        ? Stack(
+                            children: [
+                              ListView.separated(
+                                itemBuilder: (context, index) {
+                                  if (index == checkout.lineItems.length) {
+                                    return Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
+                                      child: SizedBox(
+                                        height: 44,
+                                        child: _priceView('SUBTOTAL',
+                                            checkout.subtotalPrice ?? 0),
+                                      ),
+                                    );
+                                  }
+                                  return CartItemView(
+                                      lineItem: checkout.lineItems[index],
+                                      onDelete: () {
+                                        DialogManager.showCommonDialog(context,
+                                            message:
+                                                'Are you sure you want to delete this item from Cart?',
+                                            isAlert: true,
+                                            actionTitle: 'Yes', action: () {
+                                          _model.deleteItemAt(index);
+                                        });
+                                      });
+                                },
+                                itemCount: checkout.lineItems.length + 1,
+                                separatorBuilder: (context, index) {
+                                  return Container(
+                                    color: Colors.grey[200],
+                                    height: 8,
+                                  );
+                                },
                               ),
+                              Positioned(
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    children: [
+                                      _priceView(
+                                          'TOTAL', checkout.totalPrice ?? 0),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                      CommonButton(
+                                        'Checkout'.toUpperCase(),
+                                        action: () {
+                                          Navigator.of(context).pushNamed(
+                                              Routes.checkoutNewAddress);
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Center(
+                            child: Text(
+                              'Your cart is empty.',
+                              style: TextStyles.content,
                             ),
                           ),
-                        ],
-                      )
-                    : Center(
-                        child: Text(
-                          'Your cart is empty.',
-                          style: TextStyles.content,
-                        ),
-                      ),
-            model.state == ViewState.Busy ? LoadingView() : Container()
-          ],
-        ),
-        model: _model,
-        onModelFetchData: (model) => model.loadCheckout(context),
-      ),
-    ));
+                model.state == ViewState.Busy ? LoadingView() : Container()
+              ],
+            ),
+            model: _model,
+            onModelFetchData: (model) => model.loadCheckout(context),
+          ),
+        ));
   }
 
   Widget _priceView(String title, double price) {

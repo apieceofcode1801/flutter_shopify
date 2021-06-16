@@ -3,6 +3,8 @@ import 'package:flutter_shopify/models/checkout.dart';
 import 'package:flutter_shopify/ui/base/base_view.dart';
 import 'package:flutter_shopify/ui/base/base_viewmodel.dart';
 import 'package:flutter_shopify/ui/views/new_address/new_address_viewmodel.dart';
+import 'package:flutter_shopify/ui/views/styles/text_styles.dart';
+import 'package:flutter_shopify/ui/widgets/common_button.dart';
 import 'package:flutter_shopify/ui/widgets/loading.dart';
 
 class NewAddressView extends StatelessWidget {
@@ -11,55 +13,71 @@ class NewAddressView extends StatelessWidget {
   final _model = NewAddressViewModel();
   final _formKey = GlobalKey<FormState>();
   NewAddressView({required this.actionTitle, required this.action});
+
   @override
   Widget build(BuildContext context) {
-    final countries = _model.countries;
-    final currentCountry = _model.currentCountry;
     return BaseView<NewAddressViewModel>(
       builder: (context, model, child) => Stack(
         children: [
           model.state == ViewState.Initial
               ? LoadingView()
-              : Form(
-                  key: _formKey,
-                  child: ListView(
-                    children: [
-                      Column(
-                        children: [
-                          TextFormInputField(
+              : Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Form(
+                    key: _formKey,
+                    child: ListView(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: TextFormInputField(
                             item: CustomFormItem(
                                 title: 'First Name',
                                 controller: _model.firstNameController,
                                 canBeEmpty: false),
                           ),
-                          TextFormInputField(
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: TextFormInputField(
                             item: CustomFormItem(
                                 title: 'Last Name',
                                 controller: _model.lastNameController,
                                 canBeEmpty: false),
                           ),
-                          TextFormInputField(
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: TextFormInputField(
                             item: CustomFormItem(
                                 title: 'Address 1',
                                 controller: _model.address1Controller,
                                 canBeEmpty: false),
                           ),
-                          TextFormInputField(
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: TextFormInputField(
                             item: CustomFormItem(
                                 title: 'Address 2',
                                 controller: _model.address2Controller,
                                 canBeEmpty: false),
                           ),
-                          TextFormInputField(
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: TextFormInputField(
                             item: CustomFormItem(
                                 title: 'City',
                                 controller: _model.cityController,
                                 canBeEmpty: false),
                           ),
-                          currentCountry != null &&
-                                  currentCountry.provinces.length > 0
-                              ? SelectionInputField(
-                                  selections: currentCountry.provinces
+                        ),
+                        _model.currentCountry != null &&
+                                _model.currentCountry!.provinces.length > 0
+                            ? Padding(
+                                padding: const EdgeInsets.only(bottom: 16.0),
+                                child: SelectionInputField(
+                                  selections: _model.currentCountry!.provinces
                                       .map((e) => SelectionInputItem(
                                           text: e.name, value: e.code))
                                       .toList(),
@@ -74,11 +92,14 @@ class NewAddressView extends StatelessWidget {
                                       _model.setCurrentProvince(code: value);
                                     }
                                   },
-                                )
-                              : SizedBox.shrink(),
-                          countries.isNotEmpty
-                              ? SelectionInputField(
-                                  selections: countries
+                                ),
+                              )
+                            : SizedBox.shrink(),
+                        _model.countries.isNotEmpty
+                            ? Padding(
+                                padding: const EdgeInsets.only(bottom: 16.0),
+                                child: SelectionInputField(
+                                  selections: _model.countries
                                       .map((e) => SelectionInputItem(
                                           text: e.name, value: e.code))
                                       .toList(),
@@ -93,28 +114,28 @@ class NewAddressView extends StatelessWidget {
                                       _model.setCurrentCountry(code: value);
                                     }
                                   },
-                                )
-                              : SizedBox.shrink(),
-                          TextFormInputField(
+                                ),
+                              )
+                            : SizedBox.shrink(),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: TextFormInputField(
                             item: CustomFormItem(
                                 title: 'Zip Code',
                                 controller: _model.zipCodeController,
                                 canBeEmpty: false),
                           ),
-                          Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 16.0),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    action(_model.address);
-                                  }
-                                },
-                                child: Text(actionTitle),
-                              )),
-                        ],
-                      )
-                    ],
+                        ),
+                        const SizedBox(
+                          height: 32,
+                        ),
+                        CommonButton(actionTitle, action: () {
+                          if (_formKey.currentState!.validate()) {
+                            action(_model.address);
+                          }
+                        }),
+                      ],
+                    ),
                   ),
                 ),
           model.state == ViewState.Busy ? LoadingView() : Container()
@@ -136,19 +157,26 @@ class TextFormInputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(item.title),
-        TextFormField(
-          enabled: item.onTap == null,
-          validator: (text) {
-            if (!item.canBeEmpty) {
-              if (text?.isEmpty ?? false) {
-                return 'Can not be empty';
+        Text(
+          item.title,
+          style: TextStyles.label,
+        ),
+        SizedBox(
+          height: 44,
+          child: TextFormField(
+            style: TextStyles.value,
+            enabled: item.onTap == null,
+            validator: (text) {
+              if (!item.canBeEmpty) {
+                if (text?.isEmpty ?? false) {
+                  return 'Can not be empty';
+                }
               }
-            }
-            return item.validator != null ? item.validator!(text) : null;
-          },
-          decoration: InputDecoration(hintText: item.placeholder),
-          controller: item.controller,
+              return item.validator != null ? item.validator!(text) : null;
+            },
+            decoration: InputDecoration(hintText: item.placeholder),
+            controller: item.controller,
+          ),
         ),
       ],
     );
@@ -200,28 +228,38 @@ class SelectionInputField extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            title != null ? Text(title!) : SizedBox.shrink(),
-            InputDecorator(
-              decoration: InputDecoration(
+            title != null
+                ? Text(
+                    title!,
+                    style: TextStyles.label,
+                  )
+                : SizedBox.shrink(),
+            SizedBox(
+              height: 44,
+              child: InputDecorator(
+                decoration: InputDecoration(
                   errorStyle:
                       TextStyle(color: Colors.redAccent, fontSize: 16.0),
                   hintText: placeholder,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0))),
-              isEmpty: selectedIndex == null,
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: selectedIndex != null
-                      ? selections[selectedIndex!].value
-                      : null,
-                  isDense: true,
-                  onChanged: onChanged,
-                  items: selections.map((item) {
-                    return DropdownMenuItem<String>(
-                      value: item.value,
-                      child: Text(item.text),
-                    );
-                  }).toList(),
+                ),
+                isEmpty: selectedIndex == null,
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: selectedIndex != null
+                        ? selections[selectedIndex!].value
+                        : null,
+                    isDense: true,
+                    onChanged: onChanged,
+                    items: selections.map((item) {
+                      return DropdownMenuItem<String>(
+                        value: item.value,
+                        child: Text(
+                          item.text,
+                          style: TextStyles.value,
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
             )

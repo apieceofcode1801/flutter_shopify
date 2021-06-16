@@ -103,7 +103,7 @@ class CheckoutAddress {
     country = json['country'] ?? '';
     firstname = json['first_name'] ?? '';
     lastname = json['last_name'] ?? '';
-    phone = json['phone'] ?? '';
+    phone = json['phone'];
     province = json['province'] ?? '';
     zip = json['zip'] ?? '';
     provinceCode = json['province_code'];

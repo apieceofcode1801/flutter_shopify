@@ -14,104 +14,108 @@ class ProductDetailView extends StatelessWidget {
   ProductDetailView({this.id});
   @override
   Widget build(BuildContext context) {
-    final product = _model.product;
     return BaseView<ProductDetailViewModel>(
       builder: (context, model, child) => Stack(
         children: [
           Scaffold(
             appBar: AppBar(
-              title: Text(product?.title ?? ''),
+              title: Text(model.product?.title ?? ''),
             ),
             body: Container(
               decoration: BoxDecoration(color: Colors.white),
               // constraints: BoxConstraints.expand(),
               child: Stack(
                 children: [
-                  SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 76),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          product?.images.isNotEmpty ?? false
-                              ? ProductDetailImageView(
-                                  imageURLs: product?.images
-                                          .map((e) => e.src)
-                                          .toList() ??
-                                      [])
-                              : Container(),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            product?.title ?? '',
-                            style: TextStyles.titleBold,
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            '${ShopConfig.currencySymbol}${_model.product?.minimalPrice}',
-                            style: TextStyles.subTitleRegular,
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            'Options',
-                            style: TextStyles.header,
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Container(
-                            height: 44,
-                            child: Container(
-                              child: ListView.builder(
-                                itemBuilder: (context, index) {
-                                  final variant = product?.variants[index];
-                                  print(_model.currentVariant?.title);
-                                  return GestureDetector(
-                                    child: Container(
-                                      color: _model.currentVariant == variant
-                                          ? Colors.grey
-                                          : Colors.grey[50],
-                                      height: 44,
-                                      padding: EdgeInsets.all(8),
-                                      child: Center(
-                                        child: Text(
-                                          variant?.title ?? '',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
+                  model.state == ViewState.Initial
+                      ? LoadingView()
+                      : SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 76),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                model.product?.images.isNotEmpty ?? false
+                                    ? ProductDetailImageView(
+                                        imageURLs: model.product?.images
+                                                .map((e) => e.src)
+                                                .toList() ??
+                                            [])
+                                    : Container(),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  model.product?.title ?? '',
+                                  style: TextStyles.titleBold,
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  '${ShopConfig.currencySymbol}${_model.product?.minimalPrice}',
+                                  style: TextStyles.subTitleRegular,
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  'Options',
+                                  style: TextStyles.header,
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Container(
+                                  height: 44,
+                                  child: Container(
+                                    child: ListView.builder(
+                                      itemBuilder: (context, index) {
+                                        final variant =
+                                            model.product?.variants[index];
+                                        print(_model.currentVariant?.title);
+                                        return GestureDetector(
+                                          child: Container(
+                                            color:
+                                                _model.currentVariant == variant
+                                                    ? Colors.grey
+                                                    : Colors.grey[50],
+                                            height: 44,
+                                            padding: EdgeInsets.all(8),
+                                            child: Center(
+                                              child: Text(
+                                                variant?.title ?? '',
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            if (variant != null) {
+                                              _model.setCurrentVariant(variant);
+                                            }
+                                          },
+                                        );
+                                      },
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount:
+                                          model.product?.variants.length ?? 0,
                                     ),
-                                    onTap: () {
-                                      if (variant != null) {
-                                        _model.setCurrentVariant(variant);
-                                      }
-                                    },
-                                  );
-                                },
-                                scrollDirection: Axis.horizontal,
-                                itemCount: product?.variants.length ?? 0,
-                              ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  'Description',
+                                  style: TextStyles.header,
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Text(model.product?.bodyHtml ?? ''),
+                              ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            'Description',
-                            style: TextStyles.header,
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(product?.bodyHtml ?? ''),
-                        ],
-                      ),
-                    ),
-                  ),
+                        ),
                   Positioned(
                       bottom: 0,
                       left: 0,

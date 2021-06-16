@@ -26,7 +26,7 @@ class TextStyles {
       TextStyle(fontSize: 15, fontWeight: FontWeight.w500);
 
   static TextStyle content =
-      TextStyle(fontSize: 13, fontWeight: FontWeight.normal);
+      TextStyle(fontSize: 14, fontWeight: FontWeight.normal);
 
   static TextStyle buttonText =
       TextStyle(fontSize: 15, fontWeight: FontWeight.w400);

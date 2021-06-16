@@ -5,7 +5,11 @@ import 'package:flutter_shopify/ui/base/base_view.dart';
 import 'package:flutter_shopify/ui/base/base_viewmodel.dart';
 import 'package:flutter_shopify/ui/views/checkout/checkout_shipping_viewmodel.dart';
 import 'package:flutter_shopify/ui/views/checkout/widgets/checkout_item_selection_view.dart';
+import 'package:flutter_shopify/ui/views/styles/colors.dart';
+import 'package:flutter_shopify/ui/views/styles/text_styles.dart';
+import 'package:flutter_shopify/ui/widgets/common_button.dart';
 import 'package:flutter_shopify/ui/widgets/loading.dart';
+import 'package:flutter_shopify/utils/app_utils.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutShippingView extends StatelessWidget {
@@ -24,46 +28,96 @@ class CheckoutShippingView extends StatelessWidget {
             model.state == ViewState.Initial
                 ? LoadingView()
                 : Container(
-                    padding: EdgeInsets.all(12),
+                    padding: EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Shipping address'),
-                            TextButton(onPressed: () {}, child: Text('Change'))
+                            Text(
+                              'Shipping address',
+                              style: TextStyles.titleBold,
+                            ),
+                            TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  'Change',
+                                  style: TextStyles.buttonText
+                                      .copyWith(color: AppColors.action),
+                                ))
                           ],
                         ),
                         CheckoutItemSelectionView(
                           Column(
+                            mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('${address?.name}'),
-                              SizedBox(
-                                height: 16,
-                              ),
                               Text(
-                                  '${address?.address1}, ${address?.address2}, ${address?.city}, ${address?.zip}'),
-                              const SizedBox(
-                                height: 16,
+                                '${address?.name}',
+                                style: TextStyles.content,
                               ),
-                              Text('${address?.phone}')
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Text(
+                                  '${address?.address1}, ${address?.address2}, ${address?.city}, ${address?.zip}',
+                                  style: TextStyles.content,
+                                ),
+                              ),
+                              address?.phone == null
+                                  ? const SizedBox.shrink()
+                                  : Padding(
+                                      padding: const EdgeInsets.only(top: 8),
+                                      child: Text(
+                                        '${address?.phone}',
+                                        style: TextStyles.content,
+                                      ),
+                                    )
                             ],
                           ),
                         ),
-                        Text('Shipping methods'),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          'Shipping methods',
+                          style: TextStyles.titleBold,
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: _model.shippingRates
                               .map((e) => Column(
                                     children: [
                                       GestureDetector(
                                         child: CheckoutItemSelectionView(
                                             Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text(e.title ?? ''),
-                                                Text(e.handle ?? ''),
-                                                Text('${e.price}')
+                                                Text(
+                                                  e.title ?? '',
+                                                  style: TextStyles.content,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8),
+                                                  child: Text(
+                                                    e.handle ?? '',
+                                                    style: TextStyles.content,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 8),
+                                                    child: Text(
+                                                      '${priceWithCurrency(e.price ?? 0)}',
+                                                      style: TextStyles.content,
+                                                    ))
                                               ],
                                             ),
                                             isSelected:
@@ -94,7 +148,7 @@ class CheckoutShippingView extends StatelessWidget {
                               }
                             }
                           },
-                          child: Text('Next'),
+                          child: CommonButton('Next', action: () {}),
                         )
                       ],
                     ),

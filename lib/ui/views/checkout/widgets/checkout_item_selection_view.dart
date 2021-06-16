@@ -11,7 +11,8 @@ class CheckoutItemSelectionView extends StatelessWidget {
         ? BorderSide(width: 1, color: Colors.black)
         : BorderSide(width: 1, color: Colors.grey);
     return Container(
-      padding: EdgeInsets.all(16),
+      width: double.infinity,
+      padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
           color: isSelected ? Colors.grey[200] : Colors.white,
           border: Border(
