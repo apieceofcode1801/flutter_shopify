@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_shopify/change_notifiers/checkout_model.dart';
 import 'package:flutter_shopify/ui/base/base_view.dart';
 import 'package:flutter_shopify/ui/views/checkout/checkout_payment_viewmodel.dart';
+import 'package:flutter_shopify/ui/views/checkout/widgets/checkout_address_item_view.dart';
 import 'package:flutter_shopify/ui/views/checkout/widgets/checkout_item_selection_view.dart';
+import 'package:flutter_shopify/ui/views/styles/text_styles.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutPaymentView extends StatelessWidget {
@@ -25,28 +27,25 @@ class CheckoutPaymentView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Shipping address'),
-                  TextButton(onPressed: () {}, child: Text('Change'))
+                  Text(
+                    'Billing address',
+                    style: TextStyles.titleBold,
+                  ),
+                  TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Change',
+                        style: TextStyles.buttonText,
+                      ))
                 ],
               ),
-              CheckoutItemSelectionView(
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('${address?.name}'),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                        '${address?.address1}, ${address?.address2}, ${address?.city}, ${address?.zip}'),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Text('${address?.phone}')
-                  ],
-                ),
+              address != null
+                  ? CheckoutAddressItemView(address)
+                  : const SizedBox.shrink(),
+              Text(
+                'Payment methods',
+                style: TextStyles.titleBold,
               ),
-              Text('Payment methods'),
               const SizedBox(
                 height: 16,
               ),

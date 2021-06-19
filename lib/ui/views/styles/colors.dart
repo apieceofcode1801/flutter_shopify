@@ -5,6 +5,7 @@ class AppColors {
   static Color buttonBackground = Colors.green[900]!;
   static Color buttonText = Colors.white;
   static Color dialog = Colors.white;
+  static Color border = Colors.grey[100]!;
 
   static Color cartButton = Colors.pink[100]!;
 

@@ -17,13 +17,16 @@ class NetworkService {
   var version = '/admin/api/2021-04';
   var path = '';
   var method = HttpMethod.GET;
+  String? customUrl;
 
   Map<String, String> headers = {};
   Map<String, dynamic>? parameters;
   Map<String, dynamic> body = {};
 
   Future<dynamic> request({bool needToken = false}) async {
-    final uri = Uri.https(RESTAPIConfig.baseURL, '$version$path', parameters);
+    Uri uri = customUrl != null
+        ? Uri.https(customUrl!, '')
+        : Uri.https(RESTAPIConfig.baseURL, '$version$path', parameters);
     if (needToken) {
       headers['X-Shopify-Access-Token'] = RESTAPIConfig.accessToken;
     }

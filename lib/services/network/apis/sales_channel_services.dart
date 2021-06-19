@@ -107,4 +107,55 @@ class SalesChannelServices {
       print(err.toString());
     }
   }
+
+  Future<String?> createPaymentSessionWithCreditCard(
+      {required String number,
+      required String firstName,
+      required String lastName,
+      required String month,
+      required String year,
+      required String verificationValue}) async {
+    final service = NetworkService();
+    service.customUrl = 'https://elb.deposit.shopifycs.com/sessions';
+    service.body = {
+      'credit_card': {
+        'number': number,
+        'first_name': firstName,
+        'last_name': lastName,
+        'month': month,
+        'year': year,
+        'virification_value': verificationValue
+      }
+    };
+
+    try {
+      final result = await service.request(needToken: false);
+      return result['id'] as String?;
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  Future<Payment?> createPaymentWithSessionId(String id) async {
+    final service = NetworkService();
+    service.path = '/checkouts/$id/payments.json';
+    try {
+      final result = await service.request();
+      return Payment.fromJson(result['payment']);
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  Future<List<Payment>?> getPaymentList(String token) async {
+    final service = NetworkService();
+    service.path = '/checkouts/$token/payments.json';
+    try {
+      final result = await service.request();
+      final payments = result['payments'] as List?;
+      return payments?.map((e) => Payment.fromJson(e)).toList();
+    } catch (err) {
+      print(err.toString());
+    }
+  }
 }

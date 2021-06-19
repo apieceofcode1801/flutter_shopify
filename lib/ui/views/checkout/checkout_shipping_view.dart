@@ -4,6 +4,7 @@ import 'package:flutter_shopify/change_notifiers/checkout_model.dart';
 import 'package:flutter_shopify/ui/base/base_view.dart';
 import 'package:flutter_shopify/ui/base/base_viewmodel.dart';
 import 'package:flutter_shopify/ui/views/checkout/checkout_shipping_viewmodel.dart';
+import 'package:flutter_shopify/ui/views/checkout/widgets/checkout_address_item_view.dart';
 import 'package:flutter_shopify/ui/views/checkout/widgets/checkout_item_selection_view.dart';
 import 'package:flutter_shopify/ui/views/styles/colors.dart';
 import 'package:flutter_shopify/ui/views/styles/text_styles.dart';
@@ -48,34 +49,9 @@ class CheckoutShippingView extends StatelessWidget {
                                 ))
                           ],
                         ),
-                        CheckoutItemSelectionView(
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${address?.name}',
-                                style: TextStyles.content,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8),
-                                child: Text(
-                                  '${address?.address1}, ${address?.address2}, ${address?.city}, ${address?.zip}',
-                                  style: TextStyles.content,
-                                ),
-                              ),
-                              address?.phone == null
-                                  ? const SizedBox.shrink()
-                                  : Padding(
-                                      padding: const EdgeInsets.only(top: 8),
-                                      child: Text(
-                                        '${address?.phone}',
-                                        style: TextStyles.content,
-                                      ),
-                                    )
-                            ],
-                          ),
-                        ),
+                        address != null
+                            ? CheckoutAddressItemView(address)
+                            : const SizedBox.shrink(),
                         const SizedBox(
                           height: 20,
                         ),

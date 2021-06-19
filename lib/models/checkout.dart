@@ -199,6 +199,7 @@ class CreditCard {
   String? brand;
   int? expiryMonth;
   int? expiryYear;
+  String? number;
 
   CreditCard.fromJson(Map<String, dynamic> json) {
     firstName = json['first_name'];
@@ -208,6 +209,7 @@ class CreditCard {
     brand = json['brand'];
     expiryMonth = json['expiry_month'];
     expiryYear = json['expiry_year'];
+    number = json['number'];
   }
 }
 

@@ -3,6 +3,9 @@ import 'package:flutter_shopify/ui/views/cart/cart_view.dart';
 import 'package:flutter_shopify/ui/views/checkout/checkout_new_address_view.dart';
 import 'package:flutter_shopify/ui/views/checkout/checkout_shipping_view.dart';
 import 'package:flutter_shopify/ui/views/checkout/checkout_view.dart';
+import 'package:flutter_shopify/ui/views/customer/forgot_password/forgot_password_view.dart';
+import 'package:flutter_shopify/ui/views/customer/login/login_view.dart';
+import 'package:flutter_shopify/ui/views/customer/register/register_view.dart';
 import 'package:flutter_shopify/ui/views/home/home_view.dart';
 import 'package:flutter_shopify/ui/views/loading/loading_view.dart';
 import 'package:flutter_shopify/ui/views/main/main_view.dart';
@@ -13,6 +16,12 @@ class AppRouter {
     switch (settings.name) {
       case Routes.loading:
         return MaterialPageRoute(builder: (_) => LoadingView());
+      case Routes.login:
+        return MaterialPageRoute(builder: (_) => LoginView());
+      case Routes.forgotPassword:
+        return MaterialPageRoute(builder: (_) => ForgotPasswordView());
+      case Routes.register:
+        return MaterialPageRoute(builder: (_) => RegisterView());
       case Routes.home:
         return MaterialPageRoute(builder: (_) => HomeView());
       case Routes.main:
@@ -40,6 +49,9 @@ class AppRouter {
 
 class Routes {
   static const loading = '/';
+  static const login = '/login';
+  static const forgotPassword = '/forgot_password';
+  static const register = '/register';
   static const main = '/main';
   static const home = '/home';
   static const product = '/product';
